@@ -21,7 +21,7 @@ jobs:
     # API Product Creation
       # We will check if API Product already exists by getting list of API Products filtered by name. 
       # If total value in the .meta.page.total is 0, that means no API Product with that name is present and we create a new API product else we will just get PRODUCT_ID to save it for further use.
-    - name: create api product
+    - name:   CREATE API PRODUCT
       run: | 
         GET_API_PRODUCT_URL=https://us.api.konghq.com/v2/api-products/?filter%5Bname%5D=$PRODUCT_NAME
         echo $GET_API_PRODUCT_URL 
