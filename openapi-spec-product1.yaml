@@ -1,0 +1,41 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: resqres-api
+  description: Open API Spec Example
+x-kong-name: "resqres-example"
+
+servers:
+  - url: https://reqres.in/api
+    description: "Server https://reqres.in/api"
+paths:
+  /reqres/users:
+    get:
+      description: GET Method
+      x-kong-name: "users"
+      responses:
+        '200':
+          description: Success GET
+        '400':
+          $ref: '#/components/responses/400Error'
+  /reqres/resource:
+    get:
+      description: GET Method
+      x-kong-name: "resource"
+      responses:
+        '200':
+          description: Success GET
+        '400':
+          $ref: '#/components/responses/400Error'
+components:
+  responses:
+    400Error:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+
