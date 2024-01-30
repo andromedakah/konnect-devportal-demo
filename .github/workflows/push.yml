@@ -36,7 +36,7 @@ jobs:
                 curl --request POST $POST_CREATE_API_PRODUCT_URL  \
                 --header "Authorization:Bearer $KONG_KONNECT_TOKEN" \
                 --header Content-Type:application/json \
-                --data {\"name\":\"${{CI_PROJECT_NAME}}\"} | jq -r ".id"; else cat results/apiProducts.json | jq -r '.data[0].id';
+                --data {\"name\":\"$PRODUCT_NAME\"} | jq -r ".id"; else cat results/apiProducts.json | jq -r '.data[0].id';
             fi
             )
         echo "PRODUCT ID is ....: " $PRODUCT_ID
