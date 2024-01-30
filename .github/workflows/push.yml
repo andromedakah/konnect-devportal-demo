@@ -5,6 +5,8 @@ env:
   KONG_CP_NAME: rb-demo
   SERVICE_NAME: reqres
   TAG_NAME: api-demo
+
+variables:
   CI_PROJECT_NAME: product-demo1
   
 
