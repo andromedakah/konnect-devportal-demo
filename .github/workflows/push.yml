@@ -25,9 +25,8 @@ jobs:
       run: | 
         GET_API_PRODUCT_URL=https://us.api.konghq.com/v2/api-products/?filter%5Bname%5D=$PRODUCT_NAME
         echo $GET_API_PRODUCT_URL 
-        echo $KONG_KONNECT_TOKEN
-        echo $PRODUCT_NAME
         mkdir -p results
+        touch results/apiProducts.json
         curl --request GET --url $GET_API_PRODUCT_URL --header "Authorization:Bearer $KONG_KONNECT_TOKEN" > results/apiProducts.json
         total=$(cat results/apiProducts.json | jq ".meta.page.total")
         echo $total
