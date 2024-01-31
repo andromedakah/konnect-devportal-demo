@@ -62,7 +62,7 @@ jobs:
           "status":"'published'",
           "title":"'$PRODUCT_NAME'",
           "content":"'$base64_data'"
-          }' > /dev/null 2>&1
+          }'
     - name: create api product version
       run: | 
         PRODUCT_ID=$(cat results/apiProducts.json | jq -r '.data[0].id')
