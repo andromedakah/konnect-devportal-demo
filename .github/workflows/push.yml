@@ -45,6 +45,7 @@ jobs:
     - name: create api product documentation
       run: | 
         cat products-config/product1-demo/product1-demo.md
+        PRODUCT_ID=$(cat results/apiProducts.json | jq -r '.data[0].id')
         echo $PRODUCT_ID
         echo $PRODUCT_NAME
         base64_data=$(products-config/product1-demo/product1-demo.md| base64)
