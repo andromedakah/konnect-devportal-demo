@@ -43,7 +43,7 @@ jobs:
             fi
             )
         echo "PRODUCT ID is ....: " $PRODUCT_ID
-        $PRODUCT_ID > results/product_id.txt
+        cat $PRODUCT_ID > results/product_id.txt
     - name: create api product documentation
       run: | 
         cat products-config/product1-demo/product1-demo.md
