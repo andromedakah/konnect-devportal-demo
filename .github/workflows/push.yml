@@ -57,32 +57,32 @@ jobs:
           "title":"'$PRODUCT_NAME'",
           "content":"'$base64_data'"
           }' > /dev/null 2>&1
-    # - name: create api product version
-    #   run: | 
-    #     POST_CREATE_API_PRODUCT_VERSION_URL=https://us.api.konghq.com/v2/api-products/$PRODUCT_ID/versions
-    #     echo "Creating API Product Version............"
-    #     curl --request POST $POST_CREATE_API_PRODUCT_VERSION_URL  \
-    #     --header "Authorization:Bearer $KONG_KONNECT_TOKEN" \
-    #     --header Content-Type:application/json \
-    #     --data {\"version\":\"v1\"}
-    # - name: link api product to service
-    #   run: | 
-    #     echo "check if the service exists"
-    #     GET_SERVICE_URL=https://us.api.konghq.com/v2/services/?filter%5Bname%5D=$SERVICE_NAME
-    #     echo $GET_SERVICE_URL
-    #     curl --request GET $GET_SERVICE_URL --header "Authorization:Bearer $KONG_KONNECT_TOKEN" > results/services.json
-    #     cat results/services.json
-    #     SERVICE_ID=$(cat results/services.json | jq -r '.data[0].id')
-    #     echo "SERVICE ID is ....: " $SERVICE_ID
-    #     if ( [ "$SERVICE_ID" != "null" ] ); then
-    #           POST_LINK_API_PRODUCT_TO_SERVICE_URL=https://us.api.konghq.com/v2/api-products/$PRODUCT_ID/services
-    #           echo "Linking API Product to Service............"
-    #           curl --request POST $POST_LINK_API_PRODUCT_TO_SERVICE_URL  \
-    #           --header "Authorization:Bearer $KONG_KONNECT_TOKEN" \
-    #           --header Content-Type:application/json \
-    #           --data {\"service\":{\"id\":\"$SERVICE_ID\"}}
-    #     else
-    #           echo "Service does not exist"
-    #     fi
+    - name: create api product version
+      run: | 
+        POST_CREATE_API_PRODUCT_VERSION_URL=https://us.api.konghq.com/v2/api-products/$PRODUCT_ID/versions
+        echo "Creating API Product Version............"
+        curl --request POST $POST_CREATE_API_PRODUCT_VERSION_URL  \
+        --header "Authorization:Bearer $KONG_KONNECT_TOKEN" \
+        --header Content-Type:application/json \
+        --data {\"version\":\"v1\"}
+    - name: link api product to service
+      run: | 
+        echo "check if the service exists"
+        GET_SERVICE_URL=https://us.api.konghq.com/v2/services/?filter%5Bname%5D=$SERVICE_NAME
+        echo $GET_SERVICE_URL
+        curl --request GET $GET_SERVICE_URL --header "Authorization:Bearer $KONG_KONNECT_TOKEN" > results/services.json
+        cat results/services.json
+        SERVICE_ID=$(cat results/services.json | jq -r '.data[0].id')
+        echo "SERVICE ID is ....: " $SERVICE_ID
+        if ( [ "$SERVICE_ID" != "null" ] ); then
+              POST_LINK_API_PRODUCT_TO_SERVICE_URL=https://us.api.konghq.com/v2/api-products/$PRODUCT_ID/services
+              echo "Linking API Product to Service............"
+              curl --request POST $POST_LINK_API_PRODUCT_TO_SERVICE_URL  \
+              --header "Authorization:Bearer $KONG_KONNECT_TOKEN" \
+              --header Content-Type:application/json \
+              --data {\"service\":{\"id\":\"$SERVICE_ID\"}}
+        else
+              echo "Service does not exist"
+        fi
 
     
