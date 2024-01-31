@@ -56,13 +56,13 @@ jobs:
         echo "Creating API Product Documentation............"
         curl --request POST $POST_CREATE_API_PRODUCT_DOC_URL  \
         --header "Authorization:Bearer $KONG_KONNECT_TOKEN" \
-        --header 'Content-Type:application/json' \
-        --data '{
-            "slug":"'product1-demo'",
-            "status":"'published'",
-            "title":"'product1-demo'",
-            "content":"'$base64_data'"
-            }' 
+        --header "Content-Type:application/json" \
+        --data "{
+            "slug":"$PRODUCT_NAME",
+            "status":"published",
+            "title":"$PRODUCT_NAME",
+            "content":"$base64_data"
+            }" 
 
     - name: create api product version
       run: | 
