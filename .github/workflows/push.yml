@@ -44,6 +44,7 @@ jobs:
         echo "PRODUCT ID is ....: " $PRODUCT_ID
     - name: create api product documentation
       run: | 
+        cat procudt-doc.md
         base64_data=$(cat procudt-doc.md | base64)
         #echo $base64_data
         POST_CREATE_API_PRODUCT_DOC_URL=https://us.api.konghq.com/v2/api-products/$PRODUCT_ID/documents
