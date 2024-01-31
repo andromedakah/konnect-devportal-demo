@@ -27,6 +27,7 @@ jobs:
         echo $GET_API_PRODUCT_URL 
         mkdir -p results
         touch results/apiProducts.json
+        touch results/product_id.txt
         curl --request GET --url $GET_API_PRODUCT_URL --header "Authorization:Bearer $KONG_KONNECT_TOKEN" > results/apiProducts.json
         total=$(cat results/apiProducts.json | jq ".meta.page.total")
         echo $total
