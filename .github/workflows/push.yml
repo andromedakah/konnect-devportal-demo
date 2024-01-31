@@ -6,6 +6,7 @@ env:
   SERVICE_NAME: reqres
   TAG_NAME: api-demo
   PRODUCT_NAME: product-demo1
+  PORTAL_ID: 4491f074-53cd-4b2d-9b56-b02a10fefeed
   
 
 jobs:
@@ -90,6 +91,45 @@ jobs:
               --data {\"service\":{\"id\":\"$SERVICE_ID\"}}
         else
               echo "Service does not exist"
+        fi
+    - name: make the portal public 
+      run: | 
+        echo "check if the portal exists"
+        $ID = curl --request GET \
+              --url 'https://us.api.konghq.com/v2/portals?page%5Bsize%5D=10&page%5Bnumber%5D=1' \
+              --header 'accept: application/json'| jq -r '.data[0].id'
+        echo $ID
+        echo "PORTAL ID is ....: " $PORTAL_ID
+        if ( [ "$PORTAL_ID" != "null" ] ); then
+              echo "Make the portal public...."
+              curl --request PATCH \
+                  --url https://us.api.konghq.com/v2/portals/$PORTAL_ID \
+                  --header 'Content-Type: application/json' \
+                  --header 'accept: application/json' \
+                  --data '{"is_public":true}' 
+        else
+              echo "Portal does not exist"
+        fi
+    - name: publish product to the portal 
+      run: | 
+        echo "check if the portal exists"
+        $ID = curl --request GET \
+              --url 'https://us.api.konghq.com/v2/portals?page%5Bsize%5D=10&page%5Bnumber%5D=1' \
+              --header 'accept: application/json'| jq -r '.data[0].id'
+        echo $ID
+        echo "PORTAL ID is ....: " $PORTAL_ID
+        if ( [ "$PORTAL_ID" != "null" ] ); then
+              POST_PUBLISH_PRODUCT_TO_PORTAL_URL=https://us.api.konghq.com/v2/portals/$PORTAL_ID/products
+              echo "Publishing API Product to Portal............"
+              # PUBLISH SERVICE TO PORTAL
+              PUBLISH_TO_PORTAL_URL=https://us.api.konghq.com/konnect-api/api/service_packages/$PRODUCT_ID/portals/$PORTAL_ID
+              echo $PUBLISH_TO_PORTAL_URL
+              echo "Publishing to Portal....."
+              curl --request PUT \
+                --url $PUBLISH_TO_PORTAL_URL \
+                --header "Authorization: Bearer $KONG_KONNECT_TOKEN" > /dev/null 2>&1
+        else
+              echo "Portal does not exist"
         fi
 
     
