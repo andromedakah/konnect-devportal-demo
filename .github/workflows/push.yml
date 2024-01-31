@@ -42,11 +42,11 @@ jobs:
             fi
             )
         echo "PRODUCT ID is ....: " $PRODUCT_ID
-        PRODUCT_ID=$(cat results/apiProducts.json | jq -r '.data[0].id')
+        $PRODUCT_ID > results/product_id.txt
     - name: create api product documentation
       run: | 
         cat products-config/product1-demo/product1-demo.md
-        echo 'xxx' $PRODUCT_ID
+        $PRODUCT_ID=$(cat results/product_id.txt)
         echo $PRODUCT_NAME
         base64_data=$(cat products-config/product1-demo/product1-demo.md | base64)
         echo $base64_data
