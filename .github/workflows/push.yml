@@ -58,11 +58,11 @@ jobs:
         --header "Authorization:Bearer $KONG_KONNECT_TOKEN" \
         --header Content-Type:application/json \
         --data '{
-          "slug":"'$PRODUCT_NAME'",
+          "slug":"'product1-demo'",
           "status":"'published'",
-          "title":"'$PRODUCT_NAME'",
+          "title":"'product1-demo'",
           "content":"'$base64_data'"
-          }'
+          }' > /dev/null 2>&1
     - name: create api product version
       run: | 
         PRODUCT_ID=$(cat results/apiProducts.json | jq -r '.data[0].id')
