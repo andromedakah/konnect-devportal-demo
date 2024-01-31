@@ -54,15 +54,15 @@ jobs:
         echo $base64_data
         POST_CREATE_API_PRODUCT_DOC_URL=https://us.api.konghq.com/v2/api-products/$PRODUCT_ID/documents
         echo "Creating API Product Documentation............"
-        curl --request POST $POST_CREATE_API_PRODUCT_DOC_URL  \
-              --header "Authorization:Bearer $KONG_KONNECT_TOKEN" \
-              --header Content-Type:application/json \
-              --data '{
-              "slug":"'product1-demo'",
-              "status":"'published'",
-              "title":"'product1-demo'",
-              "content":"'$base64_data'"
-              }'
+        curl --request POST https://us.api.konghq.com/v2/api-products/$PRODUCT_ID/documents  \
+        --header "Authorization:Bearer $KONG_KONNECT_TOKEN" \
+        --header Content-Type:application/json \
+        --data '{
+            "slug":"'product1-demo'",
+            "status":"'published'",
+            "title":"'product1-demo'",
+            "content":"'$base64_data'"
+            }' > /dev/null 2>&1
 
     - name: create api product version
       run: | 
