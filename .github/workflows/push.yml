@@ -44,8 +44,10 @@ jobs:
         echo "PRODUCT ID is ....: " $PRODUCT_ID
     - name: create api product documentation
       run: | 
-        cat procudt-doc.md
-        base64_data=$(cat procudt-doc.md | base64)
+        cat products-config/product1-demo/product1-demo.md
+        echo $PRODUCT_ID
+        echo $PRODUCT_NAME
+        base64_data=$(products-config/product1-demo/product1-demo.md| base64)
         #echo $base64_data
         POST_CREATE_API_PRODUCT_DOC_URL=https://us.api.konghq.com/v2/api-products/$PRODUCT_ID/documents
         echo "Creating API Product Documentation............"
@@ -54,7 +56,7 @@ jobs:
         --header Content-Type:application/json \
         --data '{
           "slug":"'$PRODUCT_NAME'",
-          "status":"'PUBLISHED'",
+          "status":"'published'",
           "title":"'$PRODUCT_NAME'",
           "content":"'$base64_data'"
           }' > /dev/null 2>&1
