@@ -60,14 +60,15 @@ jobs:
         --data '{"slug":"api-product-document","status":"published","title":"API Product Document","content":"IyBBUEkgUHJvZHVjdCBEb2N1bWVudCBIZWFkZXIKQVBJIHByb2R1Y3QgZG9jdW1lbnQgY29udGVudA=="}'
     - name: create api product specefication 
       run: | 
-        PRODUCT_VERSION_ID=$(cat results/apiProducts.json | jq -r '.data[0].product_versions[0].id')
+        PRODUCT_VERSION_ID_URL=https://us.api.konghq.com/v2/api-products/$PRODUCT_ID/product-versions?page%5Bsize%5D=10&page%5Bnumber%5D=1&filter%5Bname%5D=$PRODUCT_NAME&filter%5Bpublish_status%5D=unpublished&sort=name%20desc'
+        PRODUCT_VERSION_ID= $(curl PRODUCT_VERSION_ID_URL | jq -r '.data[0].id')
         POST_CREATE_API_PRODUCT_SPEC_URL=https://us.api.konghq.com/v2/api-products/$PRODUCT_ID/product-versions/$PRODUCT_VERSION_ID/specifications
         echo "Creating API Product Version............"
         curl --request POST $POST_CREATE_API_PRODUCT_SPEC_URL  \
         --header "Authorization:Bearer $KONG_KONNECT_TOKEN" \
         --header Content-Type:application/json \
         --data '{"name":"oas.yaml","content":"TXkgWUFNTCBvciBKU09OIGZvcm1hdHRlZCBPQVMgY29udGVudA=="}'
-        
+
     - name: create api product version
       run: | 
         POST_CREATE_API_PRODUCT_VERSION_URL=https://us.api.konghq.com/v2/api-products/$PRODUCT_ID/versions
@@ -75,26 +76,16 @@ jobs:
         curl --request POST $POST_CREATE_API_PRODUCT_VERSION_URL  \
         --header "Authorization:Bearer $KONG_KONNECT_TOKEN" \
         --header Content-Type:application/json \
-        --data '{"name":"v1"}'
-    - name: link api product to service
-      run: | 
-        echo "check if the service exists"
-        GET_SERVICE_URL=https://us.api.konghq.com/v2/services/?filter%5Bname%5D=$SERVICE_NAME
-        echo $GET_SERVICE_URL
-        curl --request GET $GET_SERVICE_URL --header "Authorization:Bearer $KONG_KONNECT_TOKEN" > results/services.json
-        cat results/services.json
-        SERVICE_ID=$(cat results/services.json | jq -r '.data[0].id')
-        echo "SERVICE ID is ....: " $SERVICE_ID
-        if ( [ "$SERVICE_ID" != "null" ] ); then
-              POST_LINK_API_PRODUCT_TO_SERVICE_URL=https://us.api.konghq.com/v2/api-products/$PRODUCT_ID/services
-              echo "Linking API Product to Service............"
-              curl --request POST $POST_LINK_API_PRODUCT_TO_SERVICE_URL  \
-              --header "Authorization:Bearer $KONG_KONNECT_TOKEN" \
-              --header Content-Type:application/json \
-              --data {\"service\":{\"id\":\"$SERVICE_ID\"}}
-        else
-              echo "Service does not exist"
-        fi
+        --data '{
+            "name": "v1",
+            "publish_status": "unpublished",
+            "deprecated": false,
+            "gateway_service": {
+              "control_plane_id": "454b11d0-b13d-42dc-a338-37f7ae7ab0f8",
+              "id": "728491c5-3f7a-4ab4-b51d-97a0b01c7de9"
+            }
+          }'
+
     - name: publish product to the portal 
       run: | 
         echo "check if the portal exists"
@@ -116,5 +107,6 @@ jobs:
         else
               echo "Portal does not exist"
         fi
+
 
     
