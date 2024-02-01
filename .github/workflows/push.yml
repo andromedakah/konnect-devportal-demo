@@ -57,13 +57,17 @@ jobs:
         curl --request POST $POST_CREATE_API_PRODUCT_DOC_URL  \
         --header "Authorization:Bearer $KONG_KONNECT_TOKEN" \
         --header 'Content-Type:application/json' \
-        --data "{
-            \"slug\":\"$PRODUCT_NAME\",
-            \"status\":\"published\",
-            \"title\":\"$PRODUCT_NAME\",
-            \"content\":\"$base64_data\"
-            }" 
-
+        --data '{"slug":"api-product-document","status":"published","title":"API Product Document","content":"IyBBUEkgUHJvZHVjdCBEb2N1bWVudCBIZWFkZXIKQVBJIHByb2R1Y3QgZG9jdW1lbnQgY29udGVudA=="}'
+    - name: create api product specefication 
+      run: | 
+        PRODUCT_VERSION_ID=$(cat results/apiProducts.json | jq -r '.data[0].product_versions[0].id')
+        POST_CREATE_API_PRODUCT_SPEC_URL=https://us.api.konghq.com/v2/api-products/$PRODUCT_ID/product-versions/$PRODUCT_VERSION_ID/specifications
+        echo "Creating API Product Version............"
+        curl --request POST $POST_CREATE_API_PRODUCT_SPEC_URL  \
+        --header "Authorization:Bearer $KONG_KONNECT_TOKEN" \
+        --header Content-Type:application/json \
+        --data '{"name":"oas.yaml","content":"TXkgWUFNTCBvciBKU09OIGZvcm1hdHRlZCBPQVMgY29udGVudA=="}'
+        
     - name: create api product version
       run: | 
         POST_CREATE_API_PRODUCT_VERSION_URL=https://us.api.konghq.com/v2/api-products/$PRODUCT_ID/versions
@@ -71,7 +75,7 @@ jobs:
         curl --request POST $POST_CREATE_API_PRODUCT_VERSION_URL  \
         --header "Authorization:Bearer $KONG_KONNECT_TOKEN" \
         --header Content-Type:application/json \
-        --data {\"version\":\"v1\"}
+        --data '{"name":"v1"}'
     - name: link api product to service
       run: | 
         echo "check if the service exists"
@@ -90,24 +94,6 @@ jobs:
               --data {\"service\":{\"id\":\"$SERVICE_ID\"}}
         else
               echo "Service does not exist"
-        fi
-    - name: make the portal public 
-      run: | 
-        echo "check if the portal exists"
-        $ID = curl --request GET \
-              --url 'https://us.api.konghq.com/v2/portals?page%5Bsize%5D=10&page%5Bnumber%5D=1' \
-              --header 'accept: application/json'| jq -r '.data[0].id'
-        echo $ID
-        echo "PORTAL ID is ....: " $PORTAL_ID
-        if ( [ "$PORTAL_ID" != "null" ] ); then
-              echo "Make the portal public...."
-              curl --request PATCH \
-                  --url https://us.api.konghq.com/v2/portals/$PORTAL_ID \
-                  --header 'Content-Type: application/json' \
-                  --header 'accept: application/json' \
-                  --data '{"is_public":true}' 
-        else
-              echo "Portal does not exist"
         fi
     - name: publish product to the portal 
       run: | 
