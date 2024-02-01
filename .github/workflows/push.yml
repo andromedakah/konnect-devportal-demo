@@ -66,7 +66,7 @@ jobs:
         curl --request POST $POST_CREATE_API_PRODUCT_VERSION_URL  \
         --header "Authorization:Bearer $KONG_KONNECT_TOKEN" \
         --header Content-Type:application/json \
-        --data '{"name":"v1"}'
+        --data '{"name":"v1","publish_status":"unpublished","deprecated":false,"gateway_service":{"control_plane_id":"454b11d0-b13d-42dc-a338-37f7ae7ab0f8","id":"728491c5-3f7a-4ab4-b51d-97a0b01c7de9"}}'
 
 
     # - name: create api product specification 
