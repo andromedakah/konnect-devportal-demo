@@ -58,16 +58,6 @@ jobs:
         --header "Authorization:Bearer $KONG_KONNECT_TOKEN" \
         --header 'Content-Type:application/json' \
         --data '{"slug":"api-product-document","status":"published","title":"API Product Document","content":"IyBBUEkgUHJvZHVjdCBEb2N1bWVudCBIZWFkZXIKQVBJIHByb2R1Y3QgZG9jdW1lbnQgY29udGVudA=="}'
-    - name: create api product specefication 
-      run: | 
-        PRODUCT_VERSION_ID_URL=https://us.api.konghq.com/v2/api-products/$PRODUCT_ID/product-versions?page%5Bsize%5D=10&page%5Bnumber%5D=1&filter%5Bname%5D=$PRODUCT_NAME&filter%5Bpublish_status%5D=unpublished&sort=name%20desc'
-        PRODUCT_VERSION_ID= $(curl PRODUCT_VERSION_ID_URL | jq -r '.data[0].id')
-        POST_CREATE_API_PRODUCT_SPEC_URL=https://us.api.konghq.com/v2/api-products/$PRODUCT_ID/product-versions/$PRODUCT_VERSION_ID/specifications
-        echo "Creating API Product Version............"
-        curl --request POST $POST_CREATE_API_PRODUCT_SPEC_URL  \
-        --header "Authorization:Bearer $KONG_KONNECT_TOKEN" \
-        --header Content-Type:application/json \
-        --data '{"name":"oas.yaml","content":"TXkgWUFNTCBvciBKU09OIGZvcm1hdHRlZCBPQVMgY29udGVudA=="}'
 
     - name: create api product version
       run: | 
@@ -85,6 +75,17 @@ jobs:
               "id": "728491c5-3f7a-4ab4-b51d-97a0b01c7de9"
             }
           }'
+          
+    - name: create api product specefication 
+      run: | 
+        PRODUCT_VERSION_ID_URL=https://us.api.konghq.com/v2/api-products/$PRODUCT_ID/product-versions?page%5Bsize%5D=10&page%5Bnumber%5D=1&filter%5Bname%5D=$PRODUCT_NAME&filter%5Bpublish_status%5D=unpublished&sort=name%20desc'
+        PRODUCT_VERSION_ID= $(curl PRODUCT_VERSION_ID_URL | jq -r '.data[0].id')
+        POST_CREATE_API_PRODUCT_SPEC_URL=https://us.api.konghq.com/v2/api-products/$PRODUCT_ID/product-versions/$PRODUCT_VERSION_ID/specifications
+        echo "Creating API Product Version............"
+        curl --request POST $POST_CREATE_API_PRODUCT_SPEC_URL  \
+        --header "Authorization:Bearer $KONG_KONNECT_TOKEN" \
+        --header Content-Type:application/json \
+        --data '{"name":"oas.yaml","content":"TXkgWUFNTCBvciBKU09OIGZvcm1hdHRlZCBPQVMgY29udGVudA=="}'
 
     - name: publish product to the portal 
       run: | 
