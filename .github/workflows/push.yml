@@ -61,7 +61,7 @@ jobs:
 
     - name: create api product version
       run: | 
-        POST_CREATE_API_PRODUCT_VERSION_URL=https://us.api.konghq.com/v2/api-products/$PRODUCT_ID/versions
+        POST_CREATE_API_PRODUCT_VERSION_URL=https://us.api.konghq.com/v2/api-products/$PRODUCT_ID/product-versions
         echo "Creating API Product Version............"
         curl --request POST $POST_CREATE_API_PRODUCT_VERSION_URL  \
         --header "Authorization:Bearer $KONG_KONNECT_TOKEN" \
